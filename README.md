@@ -128,9 +128,3 @@ README.md
 **Armaan Waels**
 [GitHub](https://github.com/armaanwaels)
 
-```
-
----
-
-**This will render perfectly on GitHub. Paste the whole thing, and you’ll have bolded sections, proper headings, and correct formatting for code and command line blocks.**
-```
