@@ -1,0 +1,18 @@
+cat > requirements.txt << 'REQ'
+# --- minimal, conflict-free stack for this project ---
+fastapi==0.116.1
+uvicorn==0.35.0
+
+numpy==2.3.2
+pandas==2.3.1
+scikit-learn==1.7.1
+joblib==1.4.2
+PyYAML==6.0.2
+
+# DVC (core, local filesystem remote)
+dvc==3.62.0
+
+# dev tools (optional but nice)
+pytest==8.2.2
+ruff==0.6.8
+REQ

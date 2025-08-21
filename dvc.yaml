@@ -22,7 +22,7 @@ stages:
           cache: false
 
   evaluate:
-    cmd: python3 src/model.py --model artifacts/model.joblib --scaler artifacts/scaler.joblib --data data/processed/processed.csv --metrics metrics/eval_metrics.json
+    cmd: python3 src/evaluate.py --data data/processed/processed.csv --model artifacts/model.joblib --scaler artifacts/scaler.joblib --metrics metrics/eval_metrics.json
     deps:
       - src/model.py
       - artifacts/model.joblib
