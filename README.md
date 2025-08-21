@@ -1,31 +1,37 @@
 
 # ML End-to-End Pipeline: Credit Card Fraud Detection
 
-This repository contains a complete machine learning workflow for credit card fraud detection, including data analysis, model training, evaluation, and a production-ready FastAPI microservice for real-time prediction.
+This repository contains a complete machine learning workflow for credit card fraud detection, including data preprocessing, model training, evaluation with tracked metrics, and a production-ready FastAPI microservice for real-time prediction. The pipeline is fully versioned with **DVC** to handle data, artifacts, and reproducibility.
 
 ---
 
 ## Project Overview
 
-- **End-to-end ML pipeline:** EDA, feature engineering, model training, evaluation, and deployment.
-- **Model serving via FastAPI**
-- **Dockerized** for portability and reproducibility.
-- **Cloud deployment** using Render.com.
-- **Clean, modular, and easy to maintain codebase.**
+* **End-to-end ML pipeline:** Preprocessing, training, evaluation, and deployment.
+* **Experiment tracking with DVC:** Data, artifacts, metrics, and params are versioned.
+* **Model serving via FastAPI** for real-time inference.
+* **Dockerized** for portability and reproducibility.
+* **Cloud deployment** using Render.com.
+* **Clean, modular, and easy to maintain codebase.**
 
 ---
 
 ## Dataset
 
-- **Source:** [Kaggle Credit Card Fraud Detection](https://www.kaggle.com/mlg-ulb/creditcardfraud)
-- The dataset is not included due to size constraints.
+* **Source:** [Kaggle Credit Card Fraud Detection](https://www.kaggle.com/mlg-ulb/creditcardfraud)
+* The dataset is not included in this repository due to size constraints.
+* Use **DVC** to pull datasets and artifacts if you have access to the remote storage.
 
 ---
 
 ## System Architecture
 
-1. **Jupyter notebooks** for exploratory analysis and model development (`notebooks/`)
-2. **Model serialization** using joblib (`app/model.joblib`, `app/scaler.joblib`)
+1. **Pipeline stages managed by DVC** (`dvc.yaml`):
+
+   * `preprocess` → raw → processed dataset
+   * `train` → model + scaler artifacts
+   * `evaluate` → evaluation metrics JSON
+2. **Model serialization** using joblib (`artifacts/model.joblib`, `artifacts/scaler.joblib`)
 3. **FastAPI microservice** for inference (`app/main.py`)
 4. **Docker** for easy deployment
 5. **Render.com** for live hosting
@@ -38,17 +44,27 @@ This repository contains a complete machine learning workflow for credit card fr
 
 ```bash
 git clone https://github.com/armaanwaels/ml-end-to-end-pipeline.git
-cd ml-end-to-end-pipeline/app
+cd ml-end-to-end-pipeline
 
 # create a virtual environment
-python3 -m venv venv
-source venv/bin/activate
+python3 -m venv .venv
+source .venv/bin/activate
 
 pip install -r requirements.txt
 
-# Start FastAPI
+# reproduce the pipeline
+dvc repro
+
+# show metrics
+dvc metrics show
+```
+
+Start the FastAPI app:
+
+```bash
+cd app
 uvicorn main:app --reload
-````
+```
 
 The API documentation will be available at [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
 
@@ -101,14 +117,21 @@ You can test the API interactively using the `/docs` Swagger UI.
 ## Repository Structure
 
 ```
-notebooks/             # Data analysis and model training
+notebooks/                # Exploratory analysis and experiments
+src/                      # Pipeline scripts (preprocess, train, evaluate)
+artifacts/                # Trained model + scaler (tracked by DVC)
+data/
+  ├─ raw/                 # Raw dataset (DVC-tracked)
+  └─ processed/           # Processed dataset (DVC-tracked)
+metrics/                  # JSON metrics tracked by DVC
 app/
-  ├─ main.py           # FastAPI application
-  ├─ model.joblib      # Trained model
-  ├─ scaler.joblib     # Data scaler
-  ├─ requirements.txt
+  ├─ main.py              # FastAPI application
+  ├─ requirements.txt     # API requirements
   └─ Dockerfile
-requirements.txt       # Project-level requirements
+dvc.yaml                  # Pipeline definition
+dvc.lock                  # Pipeline state
+params.yaml               # Parameters (train/eval configs)
+requirements.txt          # Project-level requirements
 .gitignore
 README.md
 ```
@@ -118,7 +141,8 @@ README.md
 ## Deployment Notes
 
 * Fully containerized and cloud-deployable.
-* All inference artifacts are included in `app/`.
+* Data and artifacts tracked with **DVC** (not in Git).
+* Metrics (`metrics/*.json`) and parameters (`params.yaml`) enable reproducible experiments.
 * API follows the same pipeline as in development for consistency.
 
 ---
@@ -128,3 +152,4 @@ README.md
 **Armaan Waels**
 [GitHub](https://github.com/armaanwaels)
 
+---
