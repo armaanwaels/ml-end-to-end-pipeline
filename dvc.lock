@@ -1,0 +1,79 @@
+schema: '2.0'
+stages:
+  preprocess:
+    cmd: python3 src/data.py --input data/raw/creditcard.csv --output 
+      data/processed/processed.csv --params params.yaml:preprocess
+    deps:
+    - path: data/raw/creditcard.csv
+      hash: md5
+      md5: e90efcb83d69faf99fcab8b0255024de
+      size: 150828752
+    - path: params.yaml
+      hash: md5
+      md5: b34b860f7389bcf63754b9bcf6167d28
+      size: 511
+    - path: src/data.py
+      hash: md5
+      md5: c83e1fb209f33deb48d9bdbec4c4956a
+      size: 1795
+    outs:
+    - path: data/processed/processed.csv
+      hash: md5
+      md5: 3aa1bae12eb01d6780b7ac297e3ba889
+      size: 150817597
+  train:
+    cmd: python3 src/train.py --data data/processed/processed.csv --model 
+      artifacts/model.joblib --scaler artifacts/scaler.joblib --params 
+      params.yaml:train
+    deps:
+    - path: data/processed/processed.csv
+      hash: md5
+      md5: 3aa1bae12eb01d6780b7ac297e3ba889
+      size: 150817597
+    - path: params.yaml
+      hash: md5
+      md5: b34b860f7389bcf63754b9bcf6167d28
+      size: 511
+    - path: src/train.py
+      hash: md5
+      md5: 4c5e91bba4191b48c3982d69a79fda32
+      size: 3858
+    outs:
+    - path: artifacts/model.joblib
+      hash: md5
+      md5: 01d5fd57469fa414420a3c4cee8ae5ec
+      size: 1131
+    - path: artifacts/scaler.joblib
+      hash: md5
+      md5: e1c9bb0447715ecee304a1a63674aa95
+      size: 1927
+    - path: metrics/train_metrics.json
+      hash: md5
+      md5: 62504bc189bfec4401e3dd94255eb7b7
+      size: 232
+  evaluate:
+    cmd: python3 src/evaluate.py --data data/processed/processed.csv --model 
+      artifacts/model.joblib --scaler artifacts/scaler.joblib --metrics 
+      metrics/eval_metrics.json
+    deps:
+    - path: artifacts/model.joblib
+      hash: md5
+      md5: 01d5fd57469fa414420a3c4cee8ae5ec
+      size: 1131
+    - path: artifacts/scaler.joblib
+      hash: md5
+      md5: e1c9bb0447715ecee304a1a63674aa95
+      size: 1927
+    - path: data/processed/processed.csv
+      hash: md5
+      md5: 3aa1bae12eb01d6780b7ac297e3ba889
+      size: 150817597
+    - path: src/model.py
+      hash: md5
+      md5: 86d7016473a1a94d56956ff59fd7a7cb
+      size: 2718
+    outs:
+    - path: metrics/eval_metrics.json
+      hash: md5
+      md5: 62504bc189bfec4401e3dd94255eb7b7
+      size: 232
