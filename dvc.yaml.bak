@@ -1,0 +1,33 @@
+stages:
+  preprocess:
+    cmd: python3 src/data.py --input data/raw/creditcard.csv --output data/processed/processed.csv --params params.yaml:preprocess
+    deps:
+      - src/data.py
+      - data/raw/creditcard.csv
+      - params.yaml
+    outs:
+      - data/processed/processed.csv
+
+  train:
+    cmd: python3 src/train.py --data data/processed/processed.csv --model artifacts/model.joblib --scaler artifacts/scaler.joblib --params params.yaml:train
+    deps:
+      - src/train.py
+      - data/processed/processed.csv
+      - params.yaml
+    outs:
+      - artifacts/model.joblib
+      - artifacts/scaler.joblib
+    metrics:
+      - metrics/train_metrics.json:
+          cache: false
+
+  evaluate:
+    cmd: python3 src/model.py --model artifacts/model.joblib --scaler artifacts/scaler.joblib --data data/processed/processed.csv --metrics metrics/eval_metrics.json
+    deps:
+      - src/model.py
+      - artifacts/model.joblib
+      - artifacts/scaler.joblib
+      - data/processed/processed.csv
+    metrics:
+      - metrics/eval_metrics.json:
+          cache: false
