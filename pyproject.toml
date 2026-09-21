@@ -1,0 +1,9 @@
+[tool.ruff]
+extend-exclude = ["notebooks"]
+
+[tool.ruff.lint]
+select = ["E", "F"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

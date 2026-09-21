@@ -24,7 +24,7 @@ stages:
   evaluate:
     cmd: python3 src/evaluate.py --data data/processed/processed.csv --model artifacts/model.joblib --scaler artifacts/scaler.joblib --metrics metrics/eval_metrics.json
     deps:
-      - src/model.py
+      - src/evaluate.py
       - artifacts/model.joblib
       - artifacts/scaler.joblib
       - data/processed/processed.csv

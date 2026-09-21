@@ -1,5 +1,6 @@
 # src/data.py
-import argparse, os, sys
+import argparse
+import sys
 from pathlib import Path
 
 import pandas as pd

@@ -1,11 +1,13 @@
 # src/evaluate.py
-import argparse, json
+import argparse
+import json
 from pathlib import Path
 
 import joblib
 import pandas as pd
 from sklearn.metrics import (
-    accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
+    accuracy_score, precision_score, recall_score, f1_score, roc_auc_score,
+    average_precision_score, confusion_matrix,
 )
 from sklearn.model_selection import train_test_split
 
@@ -35,13 +37,17 @@ def main():
     y_pred = model.predict(X_test_scaled)
     y_proba = getattr(model, "predict_proba", None)
 
-    roc = roc_auc_score(y_test, y_proba(X_test_scaled)[:, 1]) if y_proba else None
+    proba = y_proba(X_test_scaled)[:, 1] if y_proba else None
+    roc = roc_auc_score(y_test, proba) if proba is not None else None
     metrics = {
         "accuracy": float(accuracy_score(y_test, y_pred)),
         "precision": float(precision_score(y_test, y_pred, zero_division=0)),
         "recall": float(recall_score(y_test, y_pred, zero_division=0)),
         "f1": float(f1_score(y_test, y_pred, zero_division=0)),
         "roc_auc": float(roc) if roc is not None else None,
+        # With 0.17% positives, PR-AUC and the confusion matrix say more than accuracy.
+        "pr_auc": float(average_precision_score(y_test, proba)) if proba is not None else None,
+        "confusion_matrix": confusion_matrix(y_test, y_pred).tolist(),
         "n_test": int(len(y_test)),
         "positive_rate_test": float(y_test.mean()),
     }
