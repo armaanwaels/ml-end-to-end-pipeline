@@ -8,8 +8,8 @@ APP_DIR = Path(__file__).resolve().parents[1] / "app"
 
 
 def load_app(monkeypatch):
-    # main.py loads model.joblib and scaler.joblib relative to its working directory.
-    monkeypatch.chdir(APP_DIR)
+    # Imported from the repo root, not from app/, so a wrong working directory would fail here.
+    monkeypatch.chdir(Path(__file__).resolve().parents[1])
     monkeypatch.syspath_prepend(str(APP_DIR))
     sys.modules.pop("main", None)
     return importlib.import_module("main").app

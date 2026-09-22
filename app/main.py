@@ -1,11 +1,14 @@
+from pathlib import Path
+
 from fastapi import FastAPI
 from pydantic import BaseModel
 import joblib
 import numpy as np
 
-# Load scaler and model
-scaler = joblib.load('scaler.joblib')
-model = joblib.load('model.joblib')
+# Next to this file, both in the repo and in the image, so the working directory does not matter.
+HERE = Path(__file__).resolve().parent
+scaler = joblib.load(HERE / 'scaler.joblib')
+model = joblib.load(HERE / 'model.joblib')
 
 app = FastAPI(
     title="Credit Card Fraud Detection API",
