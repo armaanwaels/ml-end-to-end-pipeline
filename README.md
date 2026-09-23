@@ -4,7 +4,7 @@ A credit card fraud classifier taken from notebook to a versioned pipeline to a 
 
 ## Problem
 
-The ULB credit card dataset has 284,807 transactions and 492 frauds, a positive rate of 0.17%. On data like this a model can report 97% accuracy and still be close to useless, so the interesting questions are how many frauds it catches, how many false alarms it raises to do so, and whether anyone can reproduce those numbers from a clean clone.
+The ULB credit card dataset has 284,807 transactions and 492 frauds, a positive rate of 0.17%. On data like this a model can report 97% accuracy and still be close to useless, so the interesting questions are how many frauds it catches, how many false alarms that costs, and whether anyone can reproduce the numbers from a clean clone.
 
 ## Architecture
 
